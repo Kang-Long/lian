@@ -1,0 +1,70 @@
+.my-swiper > ul, .my-swiper > ul > li{
+    padding: 0;
+    margin: 0;
+}
+.my-swiper > ul > li {
+    list-style: none;
+}
+
+.my-swiper > ul,.my-swiper > ul > li {
+    height: 100%;
+}
+
+.my-swiper {
+    position: relative;
+    overflow: hidden;
+}
+/* 如果当前是从左到右的轮播那么需要让轮播区域整体进行运动 */
+.my-swiper-animation .my-swiper-list {
+    position: absolute;
+    left: 0;
+}
+.my-swiper-animation .my-swiper-list .my-swiper-item {
+    float: left;
+}
+.my-swiper-fade .my-swiper-item {
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+.my-swiper > .my-swiper-btn {
+    width: 40px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    background-color: rgba(0, 0, 0, 0.3);
+    color: #fff;
+    position: absolute;
+    top: 50%;
+    margin-top: -15px;
+    cursor: pointer;
+}
+.my-swiper > .my-swiper-btn.my-swiper-lbtn {
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+    left: 0;
+}
+.my-swiper > .my-swiper-btn.my-swiper-rbtn {
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+    right: 0;
+}
+
+.my-swiper > .my-swiper-spots {
+    position: absolute;
+    bottom: 10px;
+    width: 100%;
+    padding: 0 10px;
+    box-sizing: border-box;
+    text-align: center;
+}
+.my-swiper > .my-swiper-spots > span {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 1);
+    margin: 0 3px;
+    cursor: pointer;
+}
