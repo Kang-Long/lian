@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>轮播图</title>
+    <style>
+        * {
+            margin: 0px;
+            padding: 0px;
+            list-style: none;
+        }
+        .wrapper{
+            position: relative;
+            width: 400px;
+            height: 250px;
+            margin: 200px auto 0;
+            border: 1px solid black;
+            overflow: hidden;
+        }
+        .wrapper .sliderPage {
+            width: 2000px;
+            height: 250px;
+            position: absolute;
+            left: 0px;
+            top: 0px;
+        }
+        .wrapper .sliderPage li {
+            width: 400px;
+            height: 250px;
+            float: left;
+        }
+        .wrapper .sliderPage li img{
+            width: 100%;
+            height: 100%;
+        }
+        .btn{
+            width: 40px;
+            height: 40px;
+            position: absolute;
+            top: 50%;
+            margin-top: -20px;
+            color: #fff;
+            background-color: black;
+            text-align: center;
+            line-height: 40px;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .wrapper:hover .btn{
+            opacity: 0.5;
+        }
+
+        .btnLeft {
+            left: 10px;
+        }
+        .btnRight {
+            right: 10px;
+        }
+
+        .wrapper .sliderIndex{
+            position: absolute;
+            bottom: 15px;
+            width: 100px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .wrapper .sliderIndex span{
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background-color: #ccc;
+            border-radius: 50%;
+            margin-right: 8px;
+            cursor: pointer;
+        }
+
+        .wrapper .sliderIndex span.active{
+            background-color: #f40;
+        }
+
+
+
+        
+        
+    </style>
+</head>
+<body>
+    
+    <div class="wrapper">
+        <ul class="sliderPage">
+            <li><img src="./img/1.jpg" ></li>
+            <li><img src="./img/2.jpg" ></li>
+            <li><img src="./img/3.jpg" ></li>
+            <li><img src="./img/4.jpg" ></li>
+            <li><img src="./img/1.jpg" ></li>
+        </ul>
+        <div class="btn btnLeft">&lt;</div>
+        <div class="btn btnRight">&gt;</div>
+        <div class="sliderIndex">
+            <span class="active"></span>
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        
+        var timer = null;
+        var sliderPage = document.getElementsByClassName('sliderPage')[0];
+        var moveWidth = sliderPage.children[0].offsetWidth;
+        var num = sliderPage.children.length - 1;
+        var leftBtn = document.getElementsByClassName('btnLeft')[0];
+        var rightBtn = document.getElementsByClassName('btnRight')[0];
+        var key = true;
+        var index = 0;
+        var ospanArr = document.getElementsByClassName('sliderIndex')[0].getElementsByTagName('span');
+
+        var wrapper = document.getElementsByClassName('wrapper')[0];
+
+        leftBtn.onclick = function() {
+            autoMove('right->left')
+        }
+
+        rightBtn.onclick = function() {
+            autoMove('left->right')
+        }
+
+        for(var i = 0;i < ospanArr.length;i ++){
+            (function(myIndex){
+                ospanArr[i].onclick = function(){
+                    key = false;
+                    clearTimeout(timer);
+                    index = myIndex;
+                    startMove(sliderPage, {left: -index * moveWidth}, function(){
+                        key = true;
+                        timer = setTimeout(autoMove, 1500);
+                        changeIndex(index);
+                    })
+                }
+            })(i);
+        }
+
+        function autoMove(diretion){
+            if(key){
+                key = false;
+                clearTimeout(timer)
+                if(!diretion || diretion == 'left->right'){
+                    index ++;
+                    startMove(sliderPage, {left : sliderPage.offsetLeft - moveWidth}, function() {
+                        if(sliderPage.offsetLeft == -num * moveWidth){
+                            index = 0;
+                            sliderPage.style.left =  '0px';
+                        }
+                        timer = setTimeout(autoMove, 1500);
+                        key = true;
+                        changeIndex(index);
+                    })
+                }else if(diretion == 'right->left'){
+                    if(sliderPage.offsetLeft == 0){
+                        sliderPage.style.left = - num * moveWidth + 'px';
+                        index = num;
+                    }
+                    index --;
+                    startMove(sliderPage, {left : sliderPage.offsetLeft + moveWidth}, function() {
+                        timer = setTimeout(autoMove, 1500);
+                        key = true;
+                        changeIndex(index);
+                    })
+                }    
+            }   
+        }
+
+        function changeIndex(_index){
+            for(var i = 0;i < ospanArr.length;i ++){
+                ospanArr[i].className = '';
+            }
+            ospanArr[_index].className = 'active';
+
+        }
+        timer = setTimeout(autoMove, 2000)
+
+
+
+
+
+
+
+
+
+        //缓冲运动
+        function startMove(dom, attrObj, callback) {
+            var timer = null;
+            clearInterval(dom.timer);
+            var ispeed = null,
+                iCur = null;
+                dom.timer = setInterval(function(){
+                    var bool = true;
+                    for(var attr in attrObj){
+                        if(attr == 'opacity'){
+                            iCur = parseFloat(getStyle(dom, attr)) * 100;
+                        }else{
+                            iCur = parseInt(getStyle(dom, attr));
+                        }
+                        ispeed = (attrObj[attr] - iCur) / 7;
+                        ispeed = ispeed > 0 ? Math.ceil(ispeed) : Math.floor(ispeed);
+                        if(attrObj[attr] == 'opacity'){
+                            dom.style.opacity = (iCur + ispeed) / 100;
+                        }else{
+                            dom.style[attr] = iCur + ispeed + 'px';
+                        }
+                        if(iCur != attrObj[attr]){
+                            bool = false;
+                        }
+                        if(bool) {
+                            clearInterval(dom.timer);
+                            typeof(callback ) == 'function' && callback();
+                            console.log('over');
+                        }
+                    }
+                }, 30);
+        }
+        //获取元素属性值
+        function getStyle(elem, attr){
+            if(window.getComputedStyle) {
+                return window.getComputedStyle(elem, null)[attr];
+            }else {
+                return elem.currentStyle[attr];
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>轮播图</title>
+    <style>
+        body {
+            background-color: #eee;
+        }
+        .wrapper {
+            width: 500px;
+            height: 350px;
+            border: 1px solid #000;
+            margin: 50px auto;
+        }
+        .item1 {
+            background-color: aqua;
+        }
+        .item2 {
+            background-color: blueviolet;
+        }
+        .item3 {
+            background-color: cadetblue;
+        }
+    </style>
+    <link rel="stylesheet" href="./index.css">
+</head>
+<body>
+    <!-- 
+        实例类  -》  由构造函数构造出来的 实例对象
+        工具类  -》  直接调用
+        $.fn.extend({
+            swiper: function() {}
+        })
+
+        封装插件的步骤：
+            1. 明确插件的使用
+            2. 明确插件的参数 （在不同的位置引入的时候不同的地方）
+            3. 写好测试用例
+        
+        封装swiper方法 参数要有：
+            1）轮播的区域：  内容应该为一个数组 数组中的每一项为每次轮播的内容（DOM元素）
+                list: [dom, dom]
+            2) 尺寸： width, height
+            3) 轮播的方式： type:  'animation'(从左到右的轮播) 'fade' (淡入淡出的轮播)
+            4）是否自动轮播： autoChange: true （自动轮播） false （不自动轮播）
+            5）自动轮播时间： autoTime
+            6) 是否展示小圆点: showSpotBtn : true （展示） false（不展示
+            7）是否展示左右按钮：  showChangeBtn: 'always', 'hover', 'hidden'
+            8) 小圆点的位置： spotPosition： 'left'， 'right', 'center'
+                -->
+     <div class="wrapper">
+         <div class="item item1">item1</div>
+         <div class="item item2">item2</div>
+         <div class="item item3">item3</div>
+     </div>
+     <script src="./jquery-3.3.1.js"></script>
+     <script src="./index.js"></script>
+     <script>
+         $('.wrapper').swiper({
+            list: $('.item'),
+            width: 500,
+            height: 350,
+            type: 'fade',
+            autoChange: true,
+            autoTime: 3000,
+            showSpotBtn: true,
+            showChangeBtn: 'hover',
+            spotPosition: 'center'
+         });
+
+     </script>
+</body>
+</html>
